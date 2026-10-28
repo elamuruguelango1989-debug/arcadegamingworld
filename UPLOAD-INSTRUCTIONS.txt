@@ -1,7 +1,11 @@
-Search and AdSense preparation update
+MOBILE IMPROVEMENTS
 
-Upload the fifteen game-*.html files plus ads.txt and robots.txt into the root of your existing GitHub repository, beside index.html. Replace matching game pages and Commit changes. Keep all existing scripts, stylesheets, assets, sitemap.xml, index.html, and CNAME.
+1. Extract this ZIP.
+2. Upload all website files and the assets folder into your GitHub repository beside index.html, replacing matching files.
+3. Include mobile-v11.css and mobile-v11.js. Upload the contents, not the containing folder or ZIP.
+4. Keep your existing CNAME file and custom-domain setting.
+5. Commit the upload and wait for GitHub Pages deployment to finish. Refresh the site.
 
-After deployment, check https://arcadegamingworld.com/ads.txt and https://arcadegamingworld.com/robots.txt. The ads.txt entry uses the publisher ID you supplied: pub-3663837601952275. Compare it with the entry in your AdSense dashboard; if Google provides a different entry, use its exact value. This file does not install or enable advertising.
+Changes: landscape racing road and controls side by side; larger Solitaire cards on narrow screens with a Fit board toggle; decorative horizontal page overflow clipped.
 
-Each game page now includes its own introduction. Sound, favorites, full-screen controls, AdSense verification tags, canonical URLs, and other existing page features remain included. Your submitted sitemap still lists the same pages, so it does not need to be submitted again for these text changes.
+Checked using browser viewport layouts at 360px portrait and 844x390 landscape. This is not a real-device touch test.
