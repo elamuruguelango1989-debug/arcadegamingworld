@@ -1,15 +1,9 @@
-SKYLINE SPRINT — COMPLETE 17-GAME SITE UPDATE
+PLAY NEXT + ANALYTICS PREPARATION
 
-1. Extract this ZIP.
-2. Upload all contents, including the assets folder, beside index.html in your GitHub repository. Replace matching files.
-3. Keep your existing CNAME file.
-4. Commit the upload and wait for GitHub Pages deployment.
-5. Skyline Sprint appears first in the spotlight and game catalog. Its page is game-runner.html.
+Extract the ZIP and upload all site contents and assets beside index.html in GitHub, replacing matching files. Keep your existing CNAME file. Commit and wait for deployment.
 
-New files: arcade-v16.js, runner-v16.js, runner-v16.css, game-runner.html, assets/runner.svg. All existing arcade pages now load arcade-v16.js. Sitemap and guide include the runner.
+Play next works immediately after upload. In game dialogs it appears in Share & play next. Runner and shooter show recommendations when a run ends; Choose another game leaves full-window mode and opens those recommendations.
 
-Move automatically. Jump with Space, Up, W, or Jump. Press again for a double jump. Slide with Down, S, or Slide while on the ground. Jump orange crates; slide beneath pink laser gates. One collision ends the run. Coins add 25 points. Speed increases with distance. Pause and optional sound controls are included. Full-window mode has bottom controls and an exit button.
+Analytics is disabled until you add your G- measurement ID in analytics-config.js. Read ANALYTICS-SETUP.txt for setup and report verification. This update does not enable ads or guarantee earnings.
 
-Your other 16 games, mobile fixes, daily challenge, sound, favorites and Facebook sharing remain included.
-
-Verified: physics checks for double jump, landing, slide clearance/expiry and collision; browser launch, pause, game over, saved best after reload, copy result fallback, homepage navigation, and full-window geometry at 360x844 and 844x390. Real-phone touch performance remains unverified.
+Includes all 17 games and previous fixes.

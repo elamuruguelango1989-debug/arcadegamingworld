@@ -1,0 +1,20 @@
+GOOGLE ANALYTICS SETUP
+
+Tracking is disabled until you add your own Google Analytics 4 measurement ID. No Google Analytics code loads with the supplied blank ID.
+
+1. Open Google Analytics and create/select your GA4 property for arcadegamingworld.com.
+2. Open Admin > Data collection and modification > Data streams. Select/create a Web stream for https://arcadegamingworld.com. Copy its Measurement ID beginning G-.
+3. Edit analytics-config.js and replace the empty measurementId value with your G- ID. It is a public measurement ID, not a password or API secret. Do not paste your AdSense ca-pub ID.
+4. Upload the configuration and all updated site files.
+5. Open your website, choose Allow analytics, open games and play a runner/shooter round. In GA4 Realtime check page_view, game_open, game_start, game_end, and next_game_click. Blockers and declined consent will reduce measured traffic.
+6. In GA4, register event-scoped custom dimensions game_id and from_game if you want those fields in custom reports. Standard report processing may take time.
+
+EVENT COVERAGE
+page_view: pages visited after consent.
+game_open: existing arcade game dialogs.
+game_start and game_end: runner and shooter starts/completed runs; Whack-a-Mole completion also sends game_end. Game opens are not counted as starts.
+next_game_click: clicking a recommendation.
+
+Analytics waits for opt-in. Footer Analytics preferences lets visitors change their choice. Rejecting keeps games playable. Google Signals and ad personalisation are disabled in this integration. Consent choices are saved in the browser. This analytics preference interface does not configure AdSense ads or replace the separate certified advertising CMP requirements.
+
+Tracking connection cannot be verified until your actual ID is configured.
