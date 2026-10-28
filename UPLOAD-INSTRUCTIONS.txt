@@ -1,11 +1,13 @@
-MOBILE FULL-SCREEN REPAIR v14
+NEBULA STRIKE COMPLETE SITE UPDATE
 
-Extract the ZIP and upload all contents and assets beside index.html in GitHub. Replace matching files. Keep the existing CNAME. Commit and wait for GitHub Pages deployment.
+Extract this ZIP and upload its contents (including assets) beside index.html in your GitHub repository, replacing matching files. Keep your existing CNAME file. Commit and wait for GitHub Pages deployment.
 
-Important new files: arcade-v14.js, mobile-v14.js, mobile-v14.css. The updated index.html and all game pages load these files.
+Nebula Strike appears first in the spotlight and game catalog. There are now 16 games. It opens its own game-space.html page.
 
-On mobile, Full screen uses a full-window game layout without requesting browser-native fullscreen. Instructions and sound are in the top expandable section. Sharing is in the bottom expandable section. The game area scrolls independently when needed. Close and Exit full screen remain available. Native browser fullscreen remains available on desktop.
+New files include arcade-v15.js, space-shooter-v15.js, space-v15.css, game-space.html and assets/space.svg. All game pages load the updated arcade runtime. Sitemap includes the new game page.
 
-Previous daily challenge, Facebook sharing, score sharing, favorites, sound, Gmail contact and mobile Solitaire features are included.
+CONTROLS: WASD or arrows; phones drag within the playfield. Lasers fire automatically. Cyan upgrades weapons; green restores shields. Every third sector brings a boss. Pause or P pauses the mission. Full-window view works without requiring browser-native fullscreen. Sound starts off. Copy score and Facebook sharing are below the game.
 
-Verified using browser mobile-size layouts: all 15 expanded game dialogs at 360px portrait, Chess move input and exit, racing Start/Pause and board/control geometry at 844x390 landscape. Real iPhone/Android touch behavior was not emulated or verified.
+Previous mobile fixes, daily challenge, Facebook sharing and sound controls remain included.
+
+CHECKED: syntax, homepage navigation, launch and pause, full-window dimensions at 360x844 portrait and 844x390 landscape, copy-text fallback. Real-device touch performance and a full boss battle remain unverified.
