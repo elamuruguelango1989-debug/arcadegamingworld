@@ -1,11 +1,9 @@
-MOBILE IMPROVEMENTS
+FACEBOOK SHARING UPDATE
 
-1. Extract this ZIP.
-2. Upload all website files and the assets folder into your GitHub repository beside index.html, replacing matching files.
-3. Include mobile-v11.css and mobile-v11.js. Upload the contents, not the containing folder or ZIP.
-4. Keep your existing CNAME file and custom-domain setting.
-5. Commit the upload and wait for GitHub Pages deployment to finish. Refresh the site.
+Extract this ZIP. Upload all contents and assets to your GitHub repository beside index.html, replacing matching files. Keep your existing CNAME file. Commit and wait for GitHub Pages deployment.
 
-Changes: landscape racing road and controls side by side; larger Solitaire cards on narrow screens with a Fit board toggle; decorative horizontal page overflow clipped.
+New files: facebook-v13.js and facebook-v13.css. Updated index.html and all 15 game pages load them. All previous daily challenge, mobile layout, sound, favorites and score sharing features are included.
 
-Checked using browser viewport layouts at 360px portrait and 844x390 landscape. This is not a real-device touch test.
+Open any game and select Share on Facebook beneath the game. Facebook opens in another tab with the game link. Players can add their own message and decide whether to publish. To include their score, use Copy link / score first and paste it in their Facebook message. No website login or Meta App ID is needed for this link-based feature.
+
+Verified button creation and correct encoded destination when switching games. A Facebook post was not published during testing.
