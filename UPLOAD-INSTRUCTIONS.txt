@@ -1,11 +1,22 @@
-ArcadeGamingWorld - 14 games including Chess and Solitaire
+ArcadeGamingWorld - Visual Refresh
 
+INCLUDES
+- Custom artwork for all 15 games, new logo, controller illustration
+- Featured Racing, Chess, and Solitaire section
+- Full screen control for every game (expanded layout fallback when browser full-screen is unavailable)
+- About, Contact, Privacy Policy, and all game guides
+- Gmail-only contact: customerarcadesupport@gmail.com
+- AdSense ownership meta tag: ca-pub-3663837601952275
+
+UPLOAD TO GITHUB
 1. Extract this ZIP.
-2. In your GitHub repository, select Add file > Upload files.
-3. Upload index.html, arcade-v5-solitaire.js, and CHESS-LICENSE.txt into the repository root. Replace index.html when prompted.
-4. Commit changes and wait for GitHub Pages deployment.
-5. Refresh your website. Solitaire appears first, followed by Chess.
+2. Open the arcadegamingworld repository and choose Add file > Upload files.
+3. Drag ALL the extracted website files AND the assets folder onto the upload page. Upload the contents, not the ZIP or an enclosing arcade-refresh folder.
+4. Files at the repository root should include index.html, about.html, contact.html, privacy.html, how-to-play.html, support-v7.css, refresh-v8.css, arcade-v8-refresh.js, and CHESS-LICENSE.txt. The assets directory must contain the SVG artwork.
+5. Replace files with matching names and Commit changes.
+6. Keep the existing CNAME file and your domain settings.
+7. Wait for GitHub Pages deployment, then open https://arcadegamingworld.com/?v=8 in a fresh tab.
 
-Keep the existing CNAME file and custom domain settings. All earlier games are included in this script. No build tools or server setup required.
+Full screen: open any game and select Full screen. Exit full screen returns to normal play. Some browsers use the expanded layout instead of hiding browser controls.
 
-Solitaire: Klondike, draw one, unlimited redeals. Select a face-up card or stack and then a highlighted destination. Alternating descending tableau piles, King-only empty columns, same-suit ascending foundations. Includes Hint, Undo, automatic face-up reveals, move counter, and win detection. New deal shuffles again.
+No advertising scripts or new analytics were installed. All prior game implementations remain included.
