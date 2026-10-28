@@ -1,22 +1,20 @@
-ArcadeGamingWorld - Visual Refresh
+ArcadeGamingWorld - Individual Game Pages and Favorites
 
-INCLUDES
-- Custom artwork for all 15 games, new logo, controller illustration
-- Featured Racing, Chess, and Solitaire section
-- Full screen control for every game (expanded layout fallback when browser full-screen is unavailable)
-- About, Contact, Privacy Policy, and all game guides
-- Gmail-only contact: customerarcadesupport@gmail.com
-- AdSense ownership meta tag: ca-pub-3663837601952275
+NEW
+- 15 permanent game pages: game-racing.html, game-chess.html, game-solitaire.html, and one for every other game
+- Save/remove favorites using heart buttons
+- Favorites filter on homepage; favorites persist on the current device when browser storage is available
+- Copy game link button on each game page, with a manual-sharing fallback
+- Updated privacy disclosure for device-local favorites
 
-UPLOAD TO GITHUB
+UPLOAD
 1. Extract this ZIP.
-2. Open the arcadegamingworld repository and choose Add file > Upload files.
-3. Drag ALL the extracted website files AND the assets folder onto the upload page. Upload the contents, not the ZIP or an enclosing arcade-refresh folder.
-4. Files at the repository root should include index.html, about.html, contact.html, privacy.html, how-to-play.html, support-v7.css, refresh-v8.css, arcade-v8-refresh.js, and CHESS-LICENSE.txt. The assets directory must contain the SVG artwork.
-5. Replace files with matching names and Commit changes.
-6. Keep the existing CNAME file and your domain settings.
-7. Wait for GitHub Pages deployment, then open https://arcadegamingworld.com/?v=8 in a fresh tab.
+2. In GitHub choose Add file > Upload files.
+3. Upload ALL files and the assets folder into the repository root, replacing matching files. Include all fifteen game-*.html pages, arcade-v9-gamepages.js and gamepages-v9.css. Upload the contents rather than an enclosing folder or the ZIP.
+4. Commit changes and wait for GitHub Pages deployment.
+5. Keep your existing CNAME file and domain settings.
+6. Reload https://arcadegamingworld.com/?v=9 in a fresh tab.
 
-Full screen: open any game and select Full screen. Exit full screen returns to normal play. Some browsers use the expanded layout instead of hiding browser controls.
+The 15 games, artwork, featured section, full-screen/expanded play, Gmail-only contact, and supplied AdSense verification meta tag are included. No additional ad scripts were installed.
 
-No advertising scripts or new analytics were installed. All prior game implementations remain included.
+Favorites are not synchronized between browsers or devices. If local storage is blocked, favorites last for the current visit only.
