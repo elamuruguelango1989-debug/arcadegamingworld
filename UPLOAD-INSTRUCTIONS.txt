@@ -1,0 +1,11 @@
+ArcadeGamingWorld - 14 games including Chess and Solitaire
+
+1. Extract this ZIP.
+2. In your GitHub repository, select Add file > Upload files.
+3. Upload index.html, arcade-v5-solitaire.js, and CHESS-LICENSE.txt into the repository root. Replace index.html when prompted.
+4. Commit changes and wait for GitHub Pages deployment.
+5. Refresh your website. Solitaire appears first, followed by Chess.
+
+Keep the existing CNAME file and custom domain settings. All earlier games are included in this script. No build tools or server setup required.
+
+Solitaire: Klondike, draw one, unlimited redeals. Select a face-up card or stack and then a highlighted destination. Alternating descending tableau piles, King-only empty columns, same-suit ascending foundations. Includes Hint, Undo, automatic face-up reveals, move counter, and win detection. New deal shuffles again.
