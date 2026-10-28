@@ -1,20 +1,9 @@
-ArcadeGamingWorld - Individual Game Pages and Favorites
+ArcadeGamingWorld - Sound Effects
 
-NEW
-- 15 permanent game pages: game-racing.html, game-chess.html, game-solitaire.html, and one for every other game
-- Save/remove favorites using heart buttons
-- Favorites filter on homepage; favorites persist on the current device when browser storage is available
-- Copy game link button on each game page, with a manual-sharing fallback
-- Updated privacy disclosure for device-local favorites
+Upload all extracted files and the assets folder into your GitHub repository root, replacing matching files. Keep your existing CNAME file. Commit changes and wait for GitHub Pages deployment.
 
-UPLOAD
-1. Extract this ZIP.
-2. In GitHub choose Add file > Upload files.
-3. Upload ALL files and the assets folder into the repository root, replacing matching files. Include all fifteen game-*.html pages, arcade-v9-gamepages.js and gamepages-v9.css. Upload the contents rather than an enclosing folder or the ZIP.
-4. Commit changes and wait for GitHub Pages deployment.
-5. Keep your existing CNAME file and domain settings.
-6. Reload https://arcadegamingworld.com/?v=9 in a fresh tab.
+New files include arcade-v10-sound.js, sound-v10.js, and sound-v10.css. All 20 HTML pages were updated, so include the individual game pages and information pages in the upload.
 
-The 15 games, artwork, featured section, full-screen/expanded play, Gmail-only contact, and supplied AdSense verification meta tag are included. No additional ad scripts were installed.
+Sound starts OFF for new visitors. Click Sound on in the header or inside a game. Adjust the volume slider. Your choice is remembered on this device. Audio starts only after interaction and goes silent when the game closes or the browser window loses focus. Browser audio restrictions may require tapping the sound toggle again.
 
-Favorites are not synchronized between browsers or devices. If local storage is blocked, favorites last for the current visit only.
+Includes original synthesized game effects, racing engine hum, coin collection/crashes, card/piece sounds, jumps, paddle bounces, scoring and win/game-over sounds. No external audio downloads, microphone access, or recordings. All prior artwork, game pages, favorites, fullscreen controls, Gmail contact, and AdSense verification tag remain included.
