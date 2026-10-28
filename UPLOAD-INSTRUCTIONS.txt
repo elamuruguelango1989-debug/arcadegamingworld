@@ -1,9 +1,11 @@
-FACEBOOK SHARING UPDATE
+MOBILE FULL-SCREEN REPAIR v14
 
-Extract this ZIP. Upload all contents and assets to your GitHub repository beside index.html, replacing matching files. Keep your existing CNAME file. Commit and wait for GitHub Pages deployment.
+Extract the ZIP and upload all contents and assets beside index.html in GitHub. Replace matching files. Keep the existing CNAME. Commit and wait for GitHub Pages deployment.
 
-New files: facebook-v13.js and facebook-v13.css. Updated index.html and all 15 game pages load them. All previous daily challenge, mobile layout, sound, favorites and score sharing features are included.
+Important new files: arcade-v14.js, mobile-v14.js, mobile-v14.css. The updated index.html and all game pages load these files.
 
-Open any game and select Share on Facebook beneath the game. Facebook opens in another tab with the game link. Players can add their own message and decide whether to publish. To include their score, use Copy link / score first and paste it in their Facebook message. No website login or Meta App ID is needed for this link-based feature.
+On mobile, Full screen uses a full-window game layout without requesting browser-native fullscreen. Instructions and sound are in the top expandable section. Sharing is in the bottom expandable section. The game area scrolls independently when needed. Close and Exit full screen remain available. Native browser fullscreen remains available on desktop.
 
-Verified button creation and correct encoded destination when switching games. A Facebook post was not published during testing.
+Previous daily challenge, Facebook sharing, score sharing, favorites, sound, Gmail contact and mobile Solitaire features are included.
+
+Verified using browser mobile-size layouts: all 15 expanded game dialogs at 360px portrait, Chess move input and exit, racing Start/Pause and board/control geometry at 844x390 landscape. Real iPhone/Android touch behavior was not emulated or verified.
