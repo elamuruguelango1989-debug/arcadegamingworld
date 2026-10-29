@@ -1,0 +1,51 @@
+ARCADEGAMINGWORLD — LUDO UPDATE
+
+Includes local Ludo for 2–4 players with optional computer opponents, animated dice, optional sound, captures, safe squares, exact-roll home lanes, computer turns, pause/resume, a rules guide and share links.
+No database or Cloudflare binding required. No online rooms or account login in this release.
+
+UPLOAD
+1. Extract this ZIP on your computer.
+2. In your existing arcadegamingworld GitHub repository, choose Add file > Upload files.
+3. Upload the following ROOT files next to index.html:
+   game-ludo.html
+   ludo-engine-v19.js
+   ludo-v19.js
+   ludo-v19.css
+   arcade-v19.js
+   index.html
+   how-to-play.html
+   sitemap.xml
+4. Put ludo.svg from this package's assets folder into the repository's existing assets folder.
+   When uploading all files together, drag the assets folder too, preserving its name.
+   Keep all existing assets and games. Do not delete or replace the entire repository.
+5. Commit to main. Wait for Cloudflare Pages to show a successful deployment.
+6. Open https://arcadegamingworld.com/game-ludo.html
+   On the homepage, search for Ludo. It should also be the first card under All games.
+7. If an older homepage persists, refresh or use a private tab. index.html must reference arcade-v19.js.
+
+This update does not include or replace _worker.js, _routes.json, the runner page, privacy page, database settings, analytics configuration or the leaderboard. Keep those existing files/settings.
+Homepage and instructions are based on your last available 17-game source. If you made newer edits to those two HTML pages, back them up and merge the Ludo additions rather than overwriting your newer changes. The new runtime adds Ludo and preserves the 17 existing games, search and favorites.
+Keep arcade-v16.js: other existing game pages may still reference it.
+Do not upload UPLOAD-LUDO.txt as a website page.
+
+PLAY
+Red is Human and Green is Computer by default. Choose 2, 3 or 4 players and Human/Computer for each seat, then Start a new game.
+All-human seats let friends share one phone, tablet or computer. Computer seats roll and choose a token automatically.
+Human: press Roll dice. On a six you may leave the yard. Tap a glowing token or use the larger Move R1 / G1 etc. buttons beneath the board.
+First player to bring four tokens home wins. Starting a new match replaces the old one; reloading does not retain the match.
+Pause before handing over the device if needed. Hiding the page pauses the match automatically.
+
+HOUSE RULES
+Six to leave the yard. Clockwise travel. Exact roll into home.
+Star squares (including colored start squares) are safe and can be shared.
+Landing on rivals on an unsafe square sends all rival tokens there to their yards.
+No blockades: stacks never block travel.
+Six, capture or home finish gives another roll. On the third consecutive six, the third move is forfeited and the turn passes; earlier moves remain.
+No legal move passes the turn, except a six retains its extra roll.
+
+VALIDATION
+Rules tests cover yard entry, exact finish and overshoot, captures, safe squares, extra turns, third-six penalty, invalid moves and winner lock. 90 simulated matches across 2–4 players finished with legal states. JavaScript syntax checks passed.
+Browser preview checked homepage search/navigation and mobile CSS widths 360, 390 and landscape 844 with no horizontal overflow. This is viewport testing, not testing on a physical phone. Test touch play on your own phone after deployment.
+
+SUPPORT
+customerarcadesupport@gmail.com
