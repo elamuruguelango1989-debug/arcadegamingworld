@@ -1,0 +1,6 @@
+ArcadeGamingWorld v23 — Daily Challenges
+
+Upload the three files: index.html, daily-challenges-v23.js, daily-challenges-v23.css.
+No D1 migrations or Worker changes.
+Challenges rotate daily at 00:00 UTC and are self-reported per device.
+The existing global leaderboard remains Runner-only; multi-game verified submissions require server validation and game instrumentation.
