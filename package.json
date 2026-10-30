@@ -1,0 +1,14 @@
+{
+  "name": "arcadegamingworld-live-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:desktop": "playwright test --project=desktop-chromium",
+    "test:mobile": "playwright test --project=mobile-chromium",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2"
+  }
+}
