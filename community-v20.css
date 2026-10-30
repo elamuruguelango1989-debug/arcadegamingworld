@@ -5,3 +5,4 @@
 .community-board table{width:100%;border-collapse:collapse}
 .community-board td,.community-board th{padding:.65rem;text-align:left;border-bottom:1px solid #ffffff25}
 .community-board select{padding:.5rem;border-radius:8px}
+.most-loved-list{list-style:decimal;padding-left:1.5rem;max-width:700px}.most-loved-list li{padding:.7rem .4rem;border-bottom:1px solid #ffffff24}.most-loved-list li a{color:inherit;font-weight:650}.most-loved-list li strong{float:right;color:#ff9fb7}

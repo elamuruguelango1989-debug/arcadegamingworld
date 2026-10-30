@@ -7,3 +7,5 @@ ARCADEGAMINGWORLD COMMUNITY UPDATE
 NOTE: The existing favorites are device-local. Shared likes use a salted IP-derived identifier (no raw IP saved), which may merge users behind the same public IP and may change when their IP changes. For reliable one-like-per-account behavior, implement login or anonymous server-issued identity. 
 NOTE: The new leaderboard only displays verified Runner scores because other games do not currently submit verified scores to D1. The existing Runner leaderboard and tables remain untouched.
 NOTE: Existing runner scores may be pruned after 7 days by the existing Worker. 'All available' is therefore not permanent history.
+V21 Most Loved Games uses existing /api/favorites. No new D1 migration required.
+The global leaderboard still displays verified Runner scores only; other games require verified score APIs before cross-game ranking.
