@@ -5,6 +5,39 @@ async function digest(value){return [...new Uint8Array(await crypto.subtle.diges
 export default {async fetch(request,env){
  const url=new URL(request.url);
  if(!url.pathname.startsWith('/api/'))return env.ASSETS.fetch(request);
+ if(url.pathname==='/api/favorites'){
+  if(!env.LEADERBOARD_DB)return json({error:'Database unavailable'},503);
+  const db=env.LEADERBOARD_DB;
+  const allowed=['runner','racing','solitaire','chess','ludo','space','snake','memory','ttt','rps','reaction','whack','2048','bricks','connect','flap','mines','pong'];
+  try{
+   if(request.method==='GET'){
+    const {results}=await db.prepare('SELECT game_id,COUNT(*) AS likes FROM game_likes GROUP BY game_id').all();
+    return json({likes:Object.fromEntries(results.map(r=>[r.game_id,r.likes]))});
+   }
+   if(request.method!=='POST')return json({error:'Method not allowed'},405);
+   if(request.headers.get('Origin')!==url.origin)return json({error:'Invalid origin'},403);
+   if(!(request.headers.get('Content-Type')||'').startsWith('application/json'))return json({error:'JSON required'},415);
+   const body=await request.text();if(body.length>512)return json({error:'Request too large'},413);
+   let data;try{data=JSON.parse(body)}catch{return json({error:'Invalid JSON'},400)}
+   if(!allowed.includes(data.game)||typeof data.liked!=='boolean')return json({error:'Invalid favorite'},400);
+   const player=await digest((env.LEADERBOARD_SALT||'arcade-favorites')+':favorites:'+(request.headers.get('CF-Connecting-IP')||'unknown'));
+   if(data.liked)await db.prepare('INSERT OR IGNORE INTO game_likes(game_id,player,created) VALUES(?,?,?)').bind(data.game,player,Date.now()).run();
+   else await db.prepare('DELETE FROM game_likes WHERE game_id=? AND player=?').bind(data.game,player).run();
+   const row=await db.prepare('SELECT COUNT(*) AS likes FROM game_likes WHERE game_id=?').bind(data.game).first();
+   return json({game:data.game,likes:row.likes,liked:data.liked});
+  }catch(e){console.error('Favorites API',e);return json({error:'Favorites unavailable; run the D1 migration'},503)}
+ }
+ if(url.pathname==='/api/leaderboard'){
+  if(request.method!=='GET')return json({error:'Method not allowed'},405);
+  if(!env.LEADERBOARD_DB)return json({error:'Database unavailable'},503);
+  try{
+   const period=url.searchParams.get('period')||'all';
+   if(!['daily','weekly','all'].includes(period))return json({error:'Invalid period'},400);
+   const now=Date.now(),start=period==='daily'?Date.parse(new Date().toISOString().slice(0,10)):period==='weekly'?now-7*86400000:0;
+   const {results}=await env.LEADERBOARD_DB.prepare('SELECT nickname,score,created FROM (SELECT nickname,score,created,ROW_NUMBER() OVER(PARTITION BY player ORDER BY score DESC,created ASC) AS rank FROM scores WHERE created>=?) WHERE rank=1 ORDER BY score DESC,created ASC LIMIT 25').bind(start).all();
+   return json({period,game:'runner',scores:results});
+  }catch(e){console.error('Leaderboard API',e);return json({error:'Leaderboard unavailable'},503)}
+ }
  if(url.pathname!=='/api/runner')return json({error:'Not found'},404);
  if(!env.LEADERBOARD_DB||!env.LEADERBOARD_SALT)return json({error:'Leaderboard is not available yet. You can still play.'},503);
  try{

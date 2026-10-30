@@ -1,0 +1,7 @@
+
+.community-count{font-size:.82rem;font-weight:700;vertical-align:middle}
+.favorite-toggle{min-width:62px}
+.community-board{max-width:1000px;margin:2rem auto;padding:1.5rem;border:1px solid #ffffff30;border-radius:18px}
+.community-board table{width:100%;border-collapse:collapse}
+.community-board td,.community-board th{padding:.65rem;text-align:left;border-bottom:1px solid #ffffff25}
+.community-board select{padding:.5rem;border-radius:8px}

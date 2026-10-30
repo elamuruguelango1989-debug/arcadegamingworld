@@ -1,0 +1,9 @@
+ARCADEGAMINGWORLD COMMUNITY UPDATE
+1. In Cloudflare > Storage & databases > D1, open the SAME database connected to the site as LEADERBOARD_DB.
+2. Open Console and run the contents of favorites-migration.sql.
+3. Upload/commit all changed files to GitHub main; let Cloudflare Pages redeploy.
+4. Test /api/favorites (should return {"likes":{}} initially) and /api/leaderboard?period=daily.
+5. Visit homepage, click a heart, refresh /api/favorites and verify the count.
+NOTE: The existing favorites are device-local. Shared likes use a salted IP-derived identifier (no raw IP saved), which may merge users behind the same public IP and may change when their IP changes. For reliable one-like-per-account behavior, implement login or anonymous server-issued identity. 
+NOTE: The new leaderboard only displays verified Runner scores because other games do not currently submit verified scores to D1. The existing Runner leaderboard and tables remain untouched.
+NOTE: Existing runner scores may be pruned after 7 days by the existing Worker. 'All available' is therefore not permanent history.
