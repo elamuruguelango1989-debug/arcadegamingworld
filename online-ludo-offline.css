@@ -15,3 +15,40 @@
  .online-live{font-size:9px;letter-spacing:0}
  .table-head{flex-wrap:wrap}
 }
+
+/* Reliable mobile dice display */
+@media (max-width: 760px) {
+  .rollbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 14px !important;
+  }
+
+  .rollbar #dice {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex: 0 0 62px !important;
+    width: 62px !important;
+    height: 62px !important;
+    min-width: 62px !important;
+    min-height: 62px !important;
+    padding: 0 !important;
+    background: #f5f3ff !important;
+    color: #26263d !important;
+    font-size: 36px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .rollbar #dice::before,
+  .rollbar #dice::after {
+    content: none !important;
+  }
+}
