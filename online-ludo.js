@@ -54,7 +54,7 @@ function render(){
  $('#start-online').disabled=!(connected&&game.phase==='lobby'&&game.players.length>=2&&game.players[0]?.id===playerId);
  $('#roll').disabled=!(connected&&myTurn&&game.dice==null);
  const die=game.dice;
- $('#dice').textContent=die==null?'✦':['','⚀','⚁','⚂','⚃','⚄','⚅'][die];
+$('#dice').textContent = die == null ? '🎲' : String(die);
  $('#dice').setAttribute('aria-label',die==null?'Dice not rolled':'Dice rolled '+die);
  if(die!=null&&die!==lastDice){$('#dice').classList.remove('rolling');void $('#dice').offsetWidth;$('#dice').classList.add('rolling');setTimeout(()=>$('#dice').classList.remove('rolling'),350);}
  lastDice=die;
