@@ -1,0 +1,1 @@
+Upload all three files to the ROOT of your GitHub arcadegamingworld repository. Replace online-ludo.html and online-ludo.js; add online-ludo-premium.css. Commit and wait for Cloudflare Pages deployment. Existing offline game and Worker are unchanged. Start a NEW room after deploying.
