@@ -47,3 +47,50 @@
  .online-tools input{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.online-board .online-token{animation:none!important;transition:none!important}}
+
+/* FIX: Show dice faces in Online Ludo */
+
+#online-dice {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 62px !important;
+  height: 62px !important;
+  min-width: 62px !important;
+  min-height: 62px !important;
+  padding: 0 !important;
+  background: #f5f3ff !important;
+  color: #26263d !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+  box-shadow: 0 5px 0 #9e99bd !important;
+}
+
+#online-dice::before {
+  content: "⚄" !important;
+  display: block !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+  color: #26263d !important;
+  font-family: "DejaVu Sans", "Segoe UI Symbol", sans-serif !important;
+  font-size: 46px !important;
+  line-height: 1 !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+#online-dice::after {
+  content: none !important;
+}
+
+#online-dice[data-face="1"]::before { content: "⚀" !important; }
+#online-dice[data-face="2"]::before { content: "⚁" !important; }
+#online-dice[data-face="3"]::before { content: "⚂" !important; }
+#online-dice[data-face="4"]::before { content: "⚃" !important; }
+#online-dice[data-face="5"]::before { content: "⚄" !important; }
+#online-dice[data-face="6"]::before { content: "⚅" !important; }
+
