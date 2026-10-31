@@ -3,7 +3,21 @@
 const MAX = 4;
 const STARTS = [0, 13, 26, 39];
 const SAFE = new Set([0, 8, 13, 21, 26, 34, 39, 47]);
-const json = (obj, status = 200) => new Response(JSON.stringify(obj), {status, headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}});
+const corsHeaders = {
+  'Access-Control-Allow-Origin': 'https://arcadegamingworld.com',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Cache-Control': 'no-store'
+};
+
+const json = (obj, status = 200) =>
+  new Response(JSON.stringify(obj), {
+    status,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      ...corsHeaders
+    }
+  });
 const validRoom = s => /^[A-Z2-9]{6}$/.test(s);
 const cleanName = s => String(s || 'Player').replace(/[<>\\\u0000-\u001f]/g,'').trim().slice(0,20) || 'Player';
 function fresh() { return {players:[],phase:'lobby',turn:0,dice:null,rolls:0,winner:null,updated:Date.now()}; }
@@ -13,7 +27,12 @@ function available(s) {return [0,1,2,3].filter(i=>legal(s,i));}
 function next(s) {s.turn=(s.turn+1)%s.players.length;s.dice=null;s.rolls=0;}
 export default {
   async fetch(request, env) {
-    const url=new URL(request.url), path=url.pathname;
+    if (request.method === 'OPTIONS') {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders
+  });
+}
     if(path==='/api/ludo/health') return json({ok:true,service:'ludo-multiplayer'});
     if(path==='/api/ludo/create' && request.method==='POST') {
       const room=Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b%32]).join('');
