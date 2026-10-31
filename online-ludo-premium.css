@@ -1,23 +1,49 @@
-/* ArcadeGamingWorld Online Ludo — clean original-inspired styling */
-:root{--agw-lime:#c5ff76;--agw-line:#34364d}
-.online-wrap{max-width:1080px;margin:0 auto;padding:22px 20px 64px}
-.online-wrap .intro{margin:20px 0 26px}
-.online-wrap .panel{border:1px solid var(--agw-line);border-radius:20px;background:#1b1c2b;padding:clamp(18px,2.6vw,28px);margin-bottom:20px}
-.section-heading h2,.game-heading h2{margin:6px 0 10px}.section-heading p{color:#b8b9c9;margin:0 0 18px}
-.online-tools{display:flex;align-items:end;gap:12px;flex-wrap:wrap}.online-tools label{display:grid;gap:7px;font-weight:650}.online-tools input{width:180px;max-width:100%;background:#fff;color:#222;border:1px solid #77788c;border-radius:10px;padding:12px;font-size:16px}.online-tools button,.room-panel button{min-height:45px;border-radius:10px;padding:10px 16px;font-weight:700}.online-tools button.primary,.room-panel button.primary,.online-actions button.primary{background:var(--agw-lime);color:#161b0d;border:0}.online-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:17px 0 8px;color:#c3c4d2}.online-info strong{color:white}.online-status{min-height:24px;color:#c6c7d8;margin:12px 0}.online-players{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.online-player{background:#121320;border:1px solid #44465e;border-radius:10px;padding:11px 14px;color:#eee;font-weight:650}.online-player.current{outline:2px solid var(--agw-lime);outline-offset:2px}
-.game-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.game-heading h2{margin:0}.live-pill{display:inline-flex;align-items:center;gap:7px;color:#c5ff76;font-size:11px;font-weight:750;letter-spacing:.08em}.live-dot{width:8px;height:8px;border-radius:50%;background:#c5ff76}
-/* The SVG and tokens must use exactly the same positioning rectangle. */
-.online-board{position:relative;width:min(100%,560px);aspect-ratio:1;margin:0 auto 18px;border:4px solid #10111a;border-radius:12px;background:#f5f3f8;overflow:hidden;box-shadow:0 8px 24px #0004}.online-board svg{display:block;width:100%;height:100%}#online-tokens{position:absolute;inset:0;pointer-events:none}
-.online-token{pointer-events:auto;position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;width:5.4%;height:5.4%;padding:0;border:2px solid white;border-radius:50%;color:#fff;font-size:clamp(8px,1vw,11px);font-weight:800;line-height:1;box-shadow:inset 0 2px 3px #fff7,inset 0 -3px 4px #0004,0 3px 5px #0005;cursor:default}.online-token:disabled{opacity:1}.online-token.movable{z-index:3;cursor:pointer;outline:3px solid #c5ff76;outline-offset:2px;box-shadow:0 0 12px #c5ff76,inset 0 2px 3px #fff8}
-/* Dice and action buttons share one compact bar, including on mobile. */
-.online-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:14px 12px;background:#131421;border:1px solid #34364d;border-radius:14px}
-.dice-tile{position:relative;flex:none;display:block;width:62px;height:62px;padding:0;border:2px solid #d8d6e2;border-radius:12px;background:#fff;color:transparent;font-size:0;line-height:0;box-shadow:0 4px 0 #a8a4b6;overflow:hidden}
-.dice-tile::before{content:'';position:absolute;inset:0;background:radial-gradient(circle,#272333 0 5px,transparent 5.5px) center/100% 100% no-repeat;opacity:0}
-.dice-tile[data-face='1']::before{opacity:1}
-.dice-tile[data-face='2']::before{opacity:1;background:radial-gradient(circle,#272333 0 5px,transparent 5.5px) 22% 22%/50% 50% no-repeat,radial-gradient(circle,#272333 0 5px,transparent 5.5px) 78% 78%/50% 50% no-repeat}
-.dice-tile[data-face='3']::before{opacity:1;background:radial-gradient(circle,#272333 0 5px,transparent 5.5px) 13% 13%/33.33% 33.33% no-repeat,radial-gradient(circle,#272333 0 5px,transparent 5.5px) center/33.33% 33.33% no-repeat,radial-gradient(circle,#272333 0 5px,transparent 5.5px) 87% 87%/33.33% 33.33% no-repeat}
-.dice-tile[data-face='4']::before,.dice-tile[data-face='5']::before,.dice-tile[data-face='6']::before{opacity:1;background:radial-gradient(circle,#272333 0 5px,transparent 5.5px) 0 0/50% 50% no-repeat,radial-gradient(circle,#272333 0 5px,transparent 5.5px) 100% 0/50% 50% no-repeat,radial-gradient(circle,#272333 0 5px,transparent 5.5px) 0 100%/50% 50% no-repeat,radial-gradient(circle,#272333 0 5px,transparent 5.5px) 100% 100%/50% 50% no-repeat}
-.dice-tile[data-face='5']::after{content:'';position:absolute;inset:0;background:radial-gradient(circle,#272333 0 5px,transparent 5.5px) center/50% 50% no-repeat}
-.dice-tile[data-face='6']::after{content:'';position:absolute;inset:0;background:radial-gradient(circle,#272333 0 5px,transparent 5.5px) 0 50%/50% 50% no-repeat,radial-gradient(circle,#272333 0 5px,transparent 5.5px) 100% 50%/50% 50% no-repeat}
-.online-actions button{min-height:48px;border-radius:10px;padding:10px 18px;font-weight:750}.online-actions button.primary{font-size:16px}.online-actions button:disabled,.room-panel button:disabled{opacity:.5;cursor:not-allowed}.move-buttons{display:flex;gap:8px;flex-wrap:wrap}.move-buttons button{background:#303248;color:white;border:1px solid #656780}.game-tip{text-align:center;color:#a9aabc;font-size:13px;margin-top:12px}
-@media(max-width:600px){.online-wrap{padding:14px 12px 45px}.online-wrap .panel{padding:14px}.online-board{width:100%;border-width:2px}.online-actions{gap:9px}.dice-tile{width:54px;height:54px}.online-actions button{min-height:46px;padding:9px 12px}.online-tools input{width:160px}}
+/* Online Ludo — offline Ludo v19 appearance. Loaded AFTER ludo-v19.css. */
+.online-wrap{max-width:1050px;margin:auto;padding:0 12px 60px}
+.online-wrap .intro{padding:26px 0 22px;margin:0}
+.online-wrap .panel{background:#1b1d2c;border:1px solid #37394e;border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:none}
+.section-heading h2,.game-heading h2{font-size:21px;margin:6px 0 12px}
+.section-heading p{margin:8px 0 18px}
+.online-tools{display:flex;align-items:end;gap:12px;flex-wrap:wrap}
+.online-tools label{display:grid;gap:8px;color:#c3c1d4;font-size:13px}
+.online-tools input{width:180px;max-width:100%;padding:12px;border:1px solid #535469;border-radius:10px;background:#10111b;color:#f3f1fc;font-size:16px}
+.online-tools button{min-height:44px}
+.online-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0}
+.online-info strong{letter-spacing:.08em;color:#fff}
+.online-status{padding:14px;background:#12131e;border-radius:12px;min-height:54px;color:#eeecf6;margin:14px 0}
+.online-players{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.online-player{padding:13px;border:1px solid #414257;border-left:5px solid var(--player-color,#aaa);border-radius:12px;color:#f3f1fc;font-size:13px}
+.online-player.current{background:#303247;border-color:var(--player-color,#aaa)}
+.game-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.game-heading h2{font-size:19px;margin:6px 0}
+.live-pill{display:inline-flex;align-items:center;gap:7px;color:#c5ff76;font-size:11px;font-weight:700;letter-spacing:.08em}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#c5ff76}
+/* Reuse the original board proportions and colors */
+.online-wrap .online-board{position:relative;isolation:isolate;aspect-ratio:1;width:100%;max-width:620px;height:auto;margin:0 auto;border:5px solid #36384c;border-radius:16px;overflow:hidden;background:#e8e7ed;box-shadow:0 15px 35px #0004;box-sizing:border-box}
+.online-board svg{display:block;width:100%;height:100%}
+#online-tokens{position:absolute;inset:0;pointer-events:none}
+/* Force circles: generic button min-height previously made tall ovals */
+.online-board #online-tokens .online-token{pointer-events:auto;position:absolute;width:5.5%;height:5.5%;min-height:0;min-width:0;max-height:none;padding:0;margin:0;aspect-ratio:1;display:grid;place-items:center;transform:translate(-50%,-50%);border:2px solid #fff;border-radius:50%;box-sizing:border-box;color:#fff;font-size:clamp(8px,1.7vw,13px);font-weight:900;line-height:1;text-shadow:0 1px 2px #000;box-shadow:0 2px 3px #0008;z-index:2;transition:left .25s,top .25s;cursor:default}
+.online-board .online-token:disabled{opacity:1}
+.online-board .online-token.movable{outline:3px solid #171a29;outline-offset:2px;z-index:4;cursor:pointer;animation:glow 1s infinite alternate}
+.online-board .online-token.finished{border-style:dashed}
+/* Exact original dice: a single Unicode face, no pseudo-elements or emoji */
+.online-wrap .online-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding:0;background:transparent;border:0;border-radius:0}
+.online-wrap #online-dice{position:relative;display:grid;place-items:center;flex:0 0 62px;width:62px;height:62px;min-width:62px;min-height:62px;padding:0;margin:0;border:0;border-radius:16px;background:#f5f3ff;color:#26263d;font-family:system-ui,sans-serif;font-size:42px;font-weight:400;line-height:1;box-shadow:0 5px 0 #9e99bd;overflow:hidden;white-space:nowrap}
+.online-wrap #online-dice::before,.online-wrap #online-dice::after{content:none!important}
+.online-actions #roll-online{min-height:44px;padding:10px 15px;font-size:16px;border-radius:10px}
+.move-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.move-buttons button{min-width:110px;font-size:13px}
+.game-tip{text-align:center;font-size:13px;color:#c4c1d2;margin:12px 0 24px}
+@media(max-width:760px){
+ .online-wrap{padding:0 12px 48px}
+ .online-wrap .panel{padding:12px}
+ .online-wrap .online-board{border-width:3px}
+ .online-board #online-tokens .online-token{font-size:clamp(7px,2.6vw,13px)}
+ .game-heading h2{font-size:17px}
+ .live-pill{font-size:10px;letter-spacing:0}
+ .online-wrap .online-actions{gap:12px}
+ .online-tools label{flex:1;min-width:130px}
+ .online-tools input{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.online-board .online-token{animation:none!important;transition:none!important}}
