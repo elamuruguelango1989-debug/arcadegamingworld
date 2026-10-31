@@ -1,0 +1,17 @@
+/* Only online-specific additions. Original ludo-v19.css owns board, tokens and dice. */
+.online-room-fields{align-items:end}
+.online-room-fields input{display:block;width:170px;max-width:100%;padding:11px;background:#10111b;border:1px solid #535469;border-radius:10px;color:#f3f1fc}
+.online-room-fields button{align-self:end}
+#room-label{color:#c5ff76;letter-spacing:.08em}
+#invite{margin-left:8px;font-size:13px}
+.online-live{font:700 11px ui-monospace,monospace;letter-spacing:1px;color:#c5ff76;white-space:nowrap}
+#tokens{position:absolute;inset:0;pointer-events:none}
+#tokens .token{pointer-events:auto;aspect-ratio:1;height:auto;min-height:0;min-width:0;max-width:none;line-height:1}
+#moves{margin-top:18px}
+#players .player strong{display:block}
+@media(max-width:760px){
+ .online-room-fields label{min-width:125px}
+ .online-room-fields input{width:100%}
+ .online-live{font-size:9px;letter-spacing:0}
+ .table-head{flex-wrap:wrap}
+}
