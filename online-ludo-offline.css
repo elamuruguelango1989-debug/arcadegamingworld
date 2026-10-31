@@ -52,3 +52,47 @@
     content: none !important;
   }
 }
+
+/* Dice-only fix */
+
+.rollbar #dice {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 62px !important;
+  width: 62px !important;
+  height: 62px !important;
+  min-width: 62px !important;
+  min-height: 62px !important;
+  padding: 0 !important;
+  font-size: 0 !important;
+  background: #f5f3ff !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+.rollbar #dice::before,
+.rollbar #dice::after {
+  content: none !important;
+}
+
+#dice .agw-dice-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 10px);
+  grid-template-rows: repeat(3, 10px);
+  gap: 4px;
+  width: 38px;
+  height: 38px;
+  margin: auto;
+}
+
+#dice .agw-dice-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #26263d;
+  visibility: hidden;
+}
+
+#dice .agw-dice-dot.visible {
+  visibility: visible;
+}
