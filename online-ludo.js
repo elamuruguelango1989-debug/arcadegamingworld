@@ -1,5 +1,41 @@
 (() => {
 'use strict';
+ 
+function showDice(value) {
+  const dice = document.getElementById('dice');
+  if (!dice) return;
+
+  const patterns = {
+    1: [4],
+    2: [0, 8],
+    3: [0, 4, 8],
+    4: [0, 2, 6, 8],
+    5: [0, 2, 4, 6, 8],
+    6: [0, 2, 3, 5, 6, 8]
+  };
+
+  const grid = document.createElement('span');
+  grid.className = 'agw-dice-grid';
+
+  const active = patterns[value] || [];
+
+  for (let i = 0; i < 9; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'agw-dice-dot';
+
+    if (active.includes(i)) {
+      dot.classList.add('visible');
+    }
+
+    grid.appendChild(dot);
+  }
+
+  dice.replaceChildren(grid);
+  dice.setAttribute(
+    'aria-label',
+    value == null ? 'Dice not rolled' : `Dice rolled ${value}`
+  );
+}
 const API='https://agw-ludo-multiplayer.sathyavathielamurugu.workers.dev';
 const $=s=>document.querySelector(s);
 const names=['Red','Green','Yellow','Blue'],letters=['R','G','Y','B'];
@@ -54,8 +90,7 @@ function render(){
  $('#start-online').disabled=!(connected&&game.phase==='lobby'&&game.players.length>=2&&game.players[0]?.id===playerId);
  $('#roll').disabled=!(connected&&myTurn&&game.dice==null);
  const die=game.dice;
-$('#dice').textContent = die == null ? '🎲' : String(die);
- $('#dice').setAttribute('aria-label',die==null?'Dice not rolled':'Dice rolled '+die);
+showDice(die);
  if(die!=null&&die!==lastDice){$('#dice').classList.remove('rolling');void $('#dice').offsetWidth;$('#dice').classList.add('rolling');setTimeout(()=>$('#dice').classList.remove('rolling'),350);}
  lastDice=die;
  const host=$('#tokens');host.replaceChildren();const occupied=new Map();
