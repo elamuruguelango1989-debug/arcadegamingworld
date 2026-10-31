@@ -96,3 +96,32 @@
 #dice .agw-dice-dot.visible {
   visibility: visible;
 }
+
+/* Online Ludo dice face — mobile and desktop */
+#dice .agw-dice-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 10px);
+  grid-template-rows: repeat(3, 10px);
+  gap: 4px;
+  width: 38px;
+  height: 38px;
+  margin: auto;
+}
+
+#dice .agw-dice-dot {
+  display: block !important;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #26263d;
+  visibility: hidden;
+}
+
+#dice .agw-dice-dot.visible {
+  visibility: visible !important;
+}
+
+#dice::before,
+#dice::after {
+  content: none !important;
+}
