@@ -94,3 +94,105 @@
 #online-dice[data-face="5"]::before { content: "⚄" !important; }
 #online-dice[data-face="6"]::before { content: "⚅" !important; }
 
+/* Online Ludo — board and controls alignment */
+
+.online-wrap .game-panel {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  padding: 20px;
+}
+
+.online-wrap .online-board {
+  width: min(100%, 620px) !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 16px auto 0 !important;
+  border: 5px solid #36384c !important;
+  border-radius: 16px !important;
+}
+
+.online-wrap .online-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 14px !important;
+  margin: 22px auto 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  min-height: 70px;
+}
+
+.online-wrap #online-dice {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 62px !important;
+  width: 62px !important;
+  height: 62px !important;
+  min-width: 62px !important;
+  min-height: 62px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 16px !important;
+  background: #f5f3ff !important;
+  color: #26263d !important;
+  box-shadow: 0 5px 0 #9e99bd !important;
+  overflow: visible !important;
+  font-size: 0 !important;
+}
+
+.online-wrap #online-dice::before {
+  content: "⚄" !important;
+  display: block !important;
+  position: static !important;
+  color: #26263d !important;
+  background: none !important;
+  font-family: "Segoe UI Symbol", sans-serif !important;
+  font-size: 43px !important;
+  line-height: 1 !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.online-wrap #online-dice::after {
+  content: none !important;
+}
+
+#online-dice[data-face="1"]::before { content: "⚀" !important; }
+#online-dice[data-face="2"]::before { content: "⚁" !important; }
+#online-dice[data-face="3"]::before { content: "⚂" !important; }
+#online-dice[data-face="4"]::before { content: "⚃" !important; }
+#online-dice[data-face="5"]::before { content: "⚄" !important; }
+#online-dice[data-face="6"]::before { content: "⚅" !important; }
+
+.online-wrap #roll-online {
+  min-height: 54px !important;
+  padding: 12px 20px !important;
+  font-size: 16px !important;
+  border-radius: 12px !important;
+}
+
+.online-wrap #online-moves {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .online-wrap .game-panel {
+    padding: 12px !important;
+  }
+
+  .online-wrap .online-board {
+    border-width: 3px !important;
+  }
+
+  .online-wrap .online-actions {
+    gap: 12px !important;
+    margin-top: 18px !important;
+  }
+}
+
+
