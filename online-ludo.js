@@ -134,7 +134,7 @@ function connect(code){
  room=code;playerId=null;game=null;lastDice=null;
  $('#room-label').textContent=room;$('#invite').disabled=false;
  $('#roll').disabled=true;$('#start-online').disabled=true;$('#tokens').replaceChildren();$('#players').replaceChildren();$('#moves').replaceChildren();
- $('#dice').textContent='✦';$('#turn-title').textContent='Connecting…';
+ showDice(null);$('#turn-title').textContent='Connecting…';
  history.replaceState(null,'',`?room=${room}`);
  const endpoint=new URL(`/api/ludo/room/${room}/ws`,API);endpoint.protocol='wss:';
  const socket=new WebSocket(endpoint);ws=socket;say('Connecting…');
