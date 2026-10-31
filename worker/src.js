@@ -1,127 +1,532 @@
-// ArcadeGamingWorld multiplayer Ludo — server-authoritative game rules.
-// Each room has a unique Durable Object and WebSocket broadcasts.
-const MAX = 4;
+
+'use strict';
+
+// ArcadeGamingWorld — Online Multiplayer Ludo
+// Cloudflare Worker + Durable Objects
+
+const MAX_PLAYERS = 4;
 const STARTS = [0, 13, 26, 39];
 const SAFE = new Set([0, 8, 13, 21, 26, 34, 39, 47]);
-const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://arcadegamingworld.com',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Cache-Control': 'no-store'
-};
+const ROOM_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
-const json = (obj, status = 200) =>
-  new Response(JSON.stringify(obj), {
+const ALLOWED_ORIGINS = new Set([
+  'https://arcadegamingworld.com',
+  'https://www.arcadegamingworld.com'
+]);
+
+function corsHeaders(request) {
+  const origin = request.headers.get('Origin');
+  return {
+    'Access-Control-Allow-Origin':
+      ALLOWED_ORIGINS.has(origin)
+        ? origin
+        : 'https://arcadegamingworld.com',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Vary': 'Origin',
+    'Cache-Control': 'no-store'
+  };
+}
+
+function json(data, status = 200, request) {
+  return new Response(JSON.stringify(data), {
     status,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
-      ...corsHeaders
+      ...corsHeaders(request)
     }
-  });
-const validRoom = s => /^[A-Z2-9]{6}$/.test(s);
-const cleanName = s => String(s || 'Player').replace(/[<>\\\u0000-\u001f]/g,'').trim().slice(0,20) || 'Player';
-function fresh() { return {players:[],phase:'lobby',turn:0,dice:null,rolls:0,winner:null,updated:Date.now()}; }
-function view(s) {return {players:s.players.map(p=>({id:p.id,name:p.name,color:p.color,pieces:p.pieces,connected:p.connected})),phase:s.phase,turn:s.turn,dice:s.dice,winner:s.winner};}
-function legal(s, i) { const p=s.players[s.turn], pos=p.pieces[i], d=s.dice; return Number.isInteger(i)&&i>=0&&i<4&&d!==null&&(pos===-1?d===6:pos+d<=57); }
-function available(s) {return [0,1,2,3].filter(i=>legal(s,i));}
-function next(s) {s.turn=(s.turn+1)%s.players.length;s.dice=null;s.rolls=0;}
-export default {
-  async fetch(request, env) {
-    if (request.method === 'OPTIONS') {
-  return new Response(null, {
-    status: 204,
-    headers: corsHeaders
   });
 }
-    if(path==='/api/ludo/health') return json({ok:true,service:'ludo-multiplayer'});
-    if(path==='/api/ludo/create' && request.method==='POST') {
-      const room=Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b%32]).join('');
-      return json({room});
+
+function validRoom(room) {
+  return /^[A-HJ-NP-Z2-9]{6}$/.test(room);
+}
+
+function cleanName(value) {
+  return String(value || 'Player')
+    .replace(/[<>\u0000-\u001f]/g, '')
+    .trim()
+    .slice(0, 20) || 'Player';
+}
+
+function newGame() {
+  return {
+    players: [],
+    phase: 'lobby',
+    turn: 0,
+    dice: null,
+    sixes: 0,
+    winner: null,
+    updated: Date.now()
+  };
+}
+
+function publicGame(game) {
+  return {
+    players: game.players.map(player => ({
+      id: player.id,
+      name: player.name,
+      color: player.color,
+      pieces: player.pieces,
+      connected: player.connected
+    })),
+    phase: game.phase,
+    turn: game.turn,
+    dice: game.dice,
+    winner: game.winner
+  };
+}
+
+function square(player, progress) {
+  if (progress < 0 || progress > 50) return null;
+  return (STARTS[player.color] + progress) % 52;
+}
+
+function legalMove(game, index) {
+  if (game.phase !== 'playing') return false;
+  if (!Number.isInteger(index) || index < 0 || index > 3) {
+    return false;
+  }
+
+  if (game.dice === null) return false;
+
+  const player = game.players[game.turn];
+  if (!player) return false;
+
+  const position = player.pieces[index];
+
+  if (position === -1) return game.dice === 6;
+
+  return position >= 0 &&
+    position < 56 &&
+    position + game.dice <= 56;
+}
+
+function availableMoves(game) {
+  return [0, 1, 2, 3].filter(index => legalMove(game, index));
+}
+
+function nextTurn(game) {
+  game.turn = (game.turn + 1) % game.players.length;
+  game.dice = null;
+  game.sixes = 0;
+}
+
+function secureDice() {
+  // Rejection sampling avoids modulo bias.
+  const bytes = new Uint8Array(1);
+  do {
+    crypto.getRandomValues(bytes);
+  } while (bytes[0] >= 252);
+
+  return (bytes[0] % 6) + 1;
+}
+
+function createRoomCode() {
+  const bytes = new Uint8Array(6);
+  crypto.getRandomValues(bytes);
+
+  return Array.from(
+    bytes,
+    byte => ROOM_ALPHABET[byte % ROOM_ALPHABET.length]
+  ).join('');
+}
+
+// Main Cloudflare Worker
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    if (request.method === 'OPTIONS') {
+      const origin = request.headers.get('Origin');
+
+      if (!ALLOWED_ORIGINS.has(origin)) {
+        return json({ error: 'Origin not allowed' }, 403, request);
+      }
+
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders(request)
+      });
     }
-    const m=path.match(/^\/api\/ludo\/room\/([A-Z2-9]{6})\/ws$/);
-    if(!m || !validRoom(m[1])) return json({error:'Not found'},404);
-    if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket') return json({error:'WebSocket required'},426);
-    const id=env.ROOMS.idFromName(m[1]);
+
+    if (path === '/api/ludo/health') {
+      return json({
+        ok: true,
+        service: 'ludo-multiplayer'
+      }, 200, request);
+    }
+
+    if (
+      path === '/api/ludo/create' &&
+      request.method === 'POST'
+    ) {
+      const origin = request.headers.get('Origin');
+
+      if (origin && !ALLOWED_ORIGINS.has(origin)) {
+        return json({ error: 'Origin not allowed' }, 403, request);
+      }
+
+      return json({
+        room: createRoomCode()
+      }, 200, request);
+    }
+
+    const match = path.match(
+      /^\/api\/ludo\/room\/([A-HJ-NP-Z2-9]{6})\/ws$/
+    );
+
+    if (!match || !validRoom(match[1])) {
+      return json({ error: 'Not found' }, 404, request);
+    }
+
+    if (
+      request.headers.get('Upgrade')?.toLowerCase() !==
+      'websocket'
+    ) {
+      return json({
+        error: 'WebSocket required'
+      }, 426, request);
+    }
+
+    const origin = request.headers.get('Origin');
+
+    if (origin && !ALLOWED_ORIGINS.has(origin)) {
+      return json({
+        error: 'Origin not allowed'
+      }, 403, request);
+    }
+
+    const id = env.ROOMS.idFromName(match[1]);
+
     return env.ROOMS.get(id).fetch(request);
   }
 };
+
+// One Durable Object per multiplayer room
 export class LudoRoom {
   constructor(ctx) {
-    this.ctx=ctx;
-    this.state=null;
-    this.ready=ctx.blockConcurrencyWhile(async()=>{this.state=await ctx.storage.get('game') || fresh();});
+    this.ctx = ctx;
+    this.state = null;
+
+    this.ready = ctx.blockConcurrencyWhile(async () => {
+      this.state =
+        (await ctx.storage.get('game')) || newGame();
+    });
   }
-  async save(){this.state.updated=Date.now();await this.ctx.storage.put('game',this.state);}
-  send(ws,msg){try{ws.send(JSON.stringify(msg));}catch{}}
-  broadcast(msg){for(const ws of this.ctx.getWebSockets())this.send(ws,msg);}
-  update(){this.broadcast({type:'state',game:view(this.state)});}
-  async fetch(request){
-    await this.ready;
-    const pair=new WebSocketPair();const client=pair[0],server=pair[1];
-    this.ctx.acceptWebSocket(server);
-    this.send(server,{type:'hello',game:view(this.state)});
-    return new Response(null,{status:101,webSocket:client});
+
+  async save() {
+    this.state.updated = Date.now();
+    await this.ctx.storage.put('game', this.state);
   }
-  async webSocketMessage(ws,data){
+
+  send(ws, message) {
     try {
-      const msg=JSON.parse(String(data));let s=this.state;
-      const id=ws.deserializeAttachment()?.id;
-      if(msg.type==='join') {
-        const requested=String(msg.token||'');
-        let p=s.players.find(p=>p.token===requested && requested.length>=24);
-        if(!p){
-          if(s.phase!=='lobby')throw Error('Match already started; only existing players can reconnect.');
-          if(s.players.length>=MAX)throw Error('Room is full.');
-          const token=crypto.randomUUID()+crypto.randomUUID();
-          p={id:crypto.randomUUID(),token,name:cleanName(msg.name),color:s.players.length,pieces:[-1,-1,-1,-1],connected:true};
-          s.players.push(p);
-        }
-        ws.serializeAttachment({id:p.id});
-        // Close older connections for the same player to avoid duplicate commands.
-        for(const other of this.ctx.getWebSockets())if(other!==ws && other.deserializeAttachment()?.id===p.id)try{other.close(4000,'Reconnected');}catch{}
-        p.connected=true;
-        this.send(ws,{type:'joined',token:p.token,playerId:p.id});
-      } else {
-        const p=s.players.find(p=>p.id===id);
-        if(!p)throw Error('Join the room first.');
-        if(msg.type==='start'){
-          if(s.phase!=='lobby'||s.players.length<2)throw Error('Need 2–4 players to start.');
-          if(s.players[0].id!==id)throw Error('Only the room creator can start.');
-          s.phase='playing';s.turn=0;s.dice=null;s.rolls=0;
-        } else if(msg.type==='roll'){
-          if(s.phase!=='playing'||s.players[s.turn].id!==id||s.dice!==null)throw Error('Not your turn to roll.');
-          s.dice=crypto.getRandomValues(new Uint32Array(1))[0]%6+1;
-          if(available(s).length===0){
-            this.broadcast({type:'notice',text:`${p.name} rolled ${s.dice} but has no legal move.`});
-            if(s.dice===6 && s.rolls<2){s.dice=null;s.rolls++;}
-            else next(s);
+      ws.send(JSON.stringify(message));
+    } catch {
+      // Ignore closed connections.
+    }
+  }
+
+  broadcast(message) {
+    for (const ws of this.ctx.getWebSockets()) {
+      this.send(ws, message);
+    }
+  }
+
+  update() {
+    this.broadcast({
+      type: 'state',
+      game: publicGame(this.state)
+    });
+  }
+
+  async fetch(request) {
+    await this.ready;
+
+    if (
+      request.headers.get('Upgrade')?.toLowerCase() !==
+      'websocket'
+    ) {
+      return new Response('WebSocket required', {
+        status: 426
+      });
+    }
+
+    const pair = new WebSocketPair();
+    const client = pair[0];
+    const server = pair[1];
+
+    this.ctx.acceptWebSocket(server);
+
+    this.send(server, {
+      type: 'hello',
+      game: publicGame(this.state)
+    });
+
+    return new Response(null, {
+      status: 101,
+      webSocket: client
+    });
+  }
+
+  async webSocketMessage(ws, data) {
+    try {
+      await this.ready;
+
+      const msg = JSON.parse(String(data));
+      const game = this.state;
+      const attachedId = ws.deserializeAttachment()?.id;
+
+      if (msg.type === 'join') {
+        const requested = String(msg.token || '');
+
+        let player = game.players.find(
+          p => requested.length >= 24 &&
+            p.token === requested
+        );
+
+        if (!player) {
+          if (game.phase !== 'lobby') {
+            throw new Error(
+              'Match already started. Only existing players can reconnect.'
+            );
           }
-        } else if(msg.type==='move'){
-          if(s.phase!=='playing'||s.players[s.turn].id!==id)throw Error('Not your turn.');
-          const i=Number(msg.piece);
-          if(!legal(s,i))throw Error('Illegal move.');
-          const dice=s.dice;
-          p.pieces[i]=p.pieces[i]===-1?0:p.pieces[i]+dice;
-          const square=(STARTS[p.color]+p.pieces[i])%52;
-          if(p.pieces[i]<=51 && !SAFE.has(square)) {
-            for(const opp of s.players)if(opp!==p)for(let j=0;j<4;j++){
-              if(opp.pieces[j]>=0&&opp.pieces[j]<=51&&(STARTS[opp.color]+opp.pieces[j])%52===square)opp.pieces[j]=-1;
+
+          if (game.players.length >= MAX_PLAYERS) {
+            throw new Error('Room is full.');
+          }
+
+          player = {
+            id: crypto.randomUUID(),
+            token: crypto.randomUUID() +
+              crypto.randomUUID(),
+            name: cleanName(msg.name),
+            color: game.players.length,
+            pieces: [-1, -1, -1, -1],
+            connected: true
+          };
+
+          game.players.push(player);
+        }
+
+        ws.serializeAttachment({ id: player.id });
+
+        for (const other of this.ctx.getWebSockets()) {
+          if (
+            other !== ws &&
+            other.deserializeAttachment()?.id === player.id
+          ) {
+            try {
+              other.close(4000, 'Reconnected');
+            } catch {
+              // Ignore connection close errors.
             }
           }
-          if(p.pieces.every(x=>x===57)){s.phase='finished';s.winner=p.id;s.dice=null;}
-          else if(dice===6 && s.rolls<2){s.dice=null;s.rolls++;}
-          else next(s);
-        } else throw Error('Unknown action.');
+        }
+
+        player.connected = true;
+
+        this.send(ws, {
+          type: 'joined',
+          token: player.token,
+          playerId: player.id
+        });
+
+      } else {
+        const player = game.players.find(
+          p => p.id === attachedId
+        );
+
+        if (!player) {
+          throw new Error('Join the room first.');
+        }
+
+        if (msg.type === 'start') {
+          if (
+            game.phase !== 'lobby' ||
+            game.players.length < 2
+          ) {
+            throw new Error(
+              'Need 2–4 players to start.'
+            );
+          }
+
+          if (game.players[0].id !== player.id) {
+            throw new Error(
+              'Only the room creator can start.'
+            );
+          }
+
+          game.phase = 'playing';
+          game.turn = 0;
+          game.dice = null;
+          game.sixes = 0;
+
+        } else if (msg.type === 'roll') {
+          if (
+            game.phase !== 'playing' ||
+            game.players[game.turn].id !== player.id ||
+            game.dice !== null
+          ) {
+            throw new Error(
+              'Not your turn to roll.'
+            );
+          }
+
+          const dice = secureDice();
+          game.dice = dice;
+
+          if (dice === 6) {
+            game.sixes++;
+          } else {
+            game.sixes = 0;
+          }
+
+          if (game.sixes === 3) {
+            this.broadcast({
+              type: 'notice',
+              text:
+                `${player.name} rolled three consecutive sixes. Turn forfeited.`
+            });
+
+            nextTurn(game);
+
+          } else if (availableMoves(game).length === 0) {
+            this.broadcast({
+              type: 'notice',
+              text:
+                `${player.name} rolled ${dice} but has no legal move.`
+            });
+
+            if (dice === 6) {
+              game.dice = null;
+            } else {
+              nextTurn(game);
+            }
+          }
+
+        } else if (msg.type === 'move') {
+          if (
+            game.phase !== 'playing' ||
+            game.players[game.turn].id !== player.id
+          ) {
+            throw new Error('Not your turn.');
+          }
+
+          const index = msg.piece;
+
+          if (!legalMove(game, index)) {
+            throw new Error('Illegal move.');
+          }
+
+          const dice = game.dice;
+
+          player.pieces[index] =
+            player.pieces[index] === -1
+              ? 0
+              : player.pieces[index] + dice;
+
+          const progress = player.pieces[index];
+          const target = square(player, progress);
+
+          let captures = 0;
+
+          if (target !== null && !SAFE.has(target)) {
+            for (const opponent of game.players) {
+              if (opponent.id === player.id) continue;
+
+              for (let j = 0; j < 4; j++) {
+                if (
+                  square(
+                    opponent,
+                    opponent.pieces[j]
+                  ) === target
+                ) {
+                  opponent.pieces[j] = -1;
+                  captures++;
+                }
+              }
+            }
+          }
+
+          if (player.pieces.every(p => p === 56)) {
+            game.phase = 'finished';
+            game.winner = player.id;
+            game.dice = null;
+
+            this.broadcast({
+              type: 'notice',
+              text: `${player.name} wins!`
+            });
+
+          } else {
+            const reachedHome = progress === 56;
+
+            const extraTurn =
+              dice === 6 ||
+              captures > 0 ||
+              reachedHome;
+
+            game.dice = null;
+
+            if (!extraTurn) {
+              nextTurn(game);
+            }
+          }
+
+        } else {
+          throw new Error('Unknown action.');
+        }
       }
-      await this.save();this.update();
-    }catch(err){this.send(ws,{type:'error',message:String(err.message||err)});}
+
+      await this.save();
+      this.update();
+
+    } catch (error) {
+      this.send(ws, {
+        type: 'error',
+        message: String(
+          error.message || error
+        )
+      });
+    }
   }
-  async webSocketClose(ws){await this.disconnect(ws);}
-  async webSocketError(ws){await this.disconnect(ws);}
-  async disconnect(ws){
-    const id=ws.deserializeAttachment()?.id;if(!id)return;
-    if(this.ctx.getWebSockets().some(other=>other!==ws&&other.deserializeAttachment()?.id===id&&other.readyState===1))return;
-    const p=this.state.players.find(p=>p.id===id);
-    if(p){p.connected=false;await this.save();this.update();}
+
+  async webSocketClose(ws) {
+    await this.disconnect(ws);
+  }
+
+  async webSocketError(ws) {
+    await this.disconnect(ws);
+  }
+
+  async disconnect(ws) {
+    await this.ready;
+
+    const id = ws.deserializeAttachment()?.id;
+
+    if (!id) return;
+
+    const anotherConnection =
+      this.ctx.getWebSockets().some(
+        other =>
+          other !== ws &&
+          other.deserializeAttachment()?.id === id &&
+          other.readyState === 1
+      );
+
+    if (anotherConnection) return;
+
+    const player = this.state.players.find(
+      p => p.id === id
+    );
+
+    if (player) {
+      player.connected = false;
+      await this.save();
+      this.update();
+    }
   }
 }
